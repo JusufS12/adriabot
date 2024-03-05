@@ -1,11 +1,15 @@
 #include <AFMotor.h>
 #include <HCSR04.h>
+#include <HUSKYLENS.h>
 
 #define SS 25
 #define LS 47
 #define DS 46
 
 #define SPEED 250
+#define BCRVENA -1      // promini kad dodas botun
+#define BPLAVA -1      // promini kad dodas botun
+#define BZELENA  -1      // promini kad dodas botun
 
 void lineFollower();
 
@@ -21,10 +25,14 @@ void setup() {
   dM4.setSpeed(SPEED - 50);
   lM3.run(RELEASE);
   dM4.run(RELEASE);
+  // postavi botun
+  pinMode(BCRVENA, INPUT_PULLUP);
+  pinMode(BPLAVA, INPUT_PULLUP);
+  pinMode(BZELENA, INPUT_PULLUP);
 }
 
 void loop() {
-  // ponavlja nekom frekvencijom (DELAY / 1000; vjerojatno)
+
   // if (zvucni.dist() > 6 || !zvucni.dist()) {
   //   lineFollower();
   // }
@@ -86,4 +94,33 @@ void lineFollower() {
     //   dM4.run(FOWARD);
     // }
   }
+}
+
+
+void birajBoju() {
+  // risi se break i stavi procedure za odredjenu boju
+  while (1) {
+    if (BCRVENA)
+      //crvena
+      pCrvena();
+    if (BPLAVA)
+      //plava
+      pPlava();
+    if (BZELENA)
+      //zelena
+      pZelena();
+  }
+}
+
+
+void pCrvena() {
+  return;
+}
+
+void pPlava() {
+  return;
+}
+
+void pZelena() {
+  return;
 }
