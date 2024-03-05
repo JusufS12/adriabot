@@ -12,15 +12,20 @@
 #define BZELENA  -1      // promini kad dodas botun
 
 void lineFollower();
+void birajBoju();
+void pCrvena();
+void pPlava();
+void pZelena();
 
 AF_DCMotor dM4(4);
 AF_DCMotor lM3(3);
 
 HCSR04 zvucni(22, 23);
 
+HUSKYLENS huskylens;
+
 void setup() {
   // turn on motor
-  // Serial.begin(9600);
   lM3.setSpeed(SPEED);
   dM4.setSpeed(SPEED - 50);
   lM3.run(RELEASE);
@@ -29,6 +34,9 @@ void setup() {
   pinMode(BCRVENA, INPUT_PULLUP);
   pinMode(BPLAVA, INPUT_PULLUP);
   pinMode(BZELENA, INPUT_PULLUP);
+  // postavi huskylens
+  Wire.begin();
+  huskylens.begin(Wire);
 }
 
 void loop() {
@@ -123,4 +131,29 @@ void pPlava() {
 
 void pZelena() {
   return;
+}
+
+
+int prepoznajBoje() {
+  // huskylens
+  // stavi funkciju u if statement u loopu
+  huskylens.request();
+  if (huskylens.available()) {
+    HUSKYLENSResult result = huskylens.read();
+    if (result.ID == 1) {
+      // crvena
+      return 1;
+    }
+    else if (result.ID == 2) {
+      // plava
+      return 2;
+    }
+    else if (result.ID == 3) {
+      // zelena
+      return 3;
+    }
+    else {
+      return -1;
+    }
+  }
 }
