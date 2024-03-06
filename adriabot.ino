@@ -1,21 +1,52 @@
 #include <AFMotor.h>
 #include <HCSR04.h>
 #include <HUSKYLENS.h>
+#include <Servo.h>
+
+// privremeno da se lakse promini
+#define KUT_OTVORI_RUKU 0         // kalibriraj da se ruka skroz otvori
+#define KUT_ZATVORI_RUKU 180      // kalibriraj da se ruka skroz zatvori
 
 #define SS 25
 #define LS 47
 #define DS 46
 
 #define SPEED 250
-#define BCRVENA -1      // promini kad dodas botun
+
+#define BCRVENA -1     // promini kad dodas botun
 #define BPLAVA -1      // promini kad dodas botun
-#define BZELENA  -1      // promini kad dodas botun
+#define BZELENA  -1    // promini kad dodas botun
+
+#define SERVO -1       // promini kad dodas servo za ruku
 
 void lineFollower();
 void birajBoju();
 void pCrvena();
 void pPlava();
 void pZelena();
+
+class Ruka {
+  public:
+    Ruka(uint8_t pin) {
+      servo.attach(pin);
+    }
+    void uhvati() {
+      if (servo.attached())
+        servo.write(KUT_ZATVORI_RUKU);     // staviti kut kad zavrsis kalibraciju
+      else
+        Serial.println("Ruka::uhvati() failed, no servo attached");
+    }
+    void pusti() {
+      if (servo.attached())
+        servo.write(KUT_OTVORI_RUKU);       // staviti kut kad zavrsis kalibraciju
+      else
+        Serial.println("Ruka::pusti() failed, no servo attached");
+    }
+  private:
+    Servo servo;
+};
+
+Ruka ruka(-1);      // promini kad spojis servo za ruku
 
 AF_DCMotor dM4(4);
 AF_DCMotor lM3(3);
@@ -24,7 +55,10 @@ HCSR04 zvucni(22, 23);
 
 HUSKYLENS huskylens;
 
+
 void setup() {
+  // debug
+  Serial.begin(9600);
   // turn on motor
   lM3.setSpeed(SPEED);
   dM4.setSpeed(SPEED - 50);
@@ -108,13 +142,13 @@ void lineFollower() {
 void birajBoju() {
   // risi se break i stavi procedure za odredjenu boju
   while (1) {
-    if (BCRVENA)
+    if (digitalRead(BCRVENA))
       //crvena
       pCrvena();
-    if (BPLAVA)
+    if (digitalRead(BPLAVA))
       //plava
       pPlava();
-    if (BZELENA)
+    if (digitalRead(BZELENA))
       //zelena
       pZelena();
   }
