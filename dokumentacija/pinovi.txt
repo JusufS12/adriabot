@@ -1,0 +1,15 @@
+Motors - 4, 3
+
+Ultrasonic - trig 22, echo 23
+
+Srednji Line Follower - 25
+Lijevi Line Follower - 47
+Desni Line Follower - 46
+
+Botun Crveni - 30 (smadja zica)
+Botun Plavi -32 (narandzasta zica)
+Botun Zeleni - 28 (crvena zica)
+
+Huskylens -
+SCL - SCL 21
+SDA - SDA 20

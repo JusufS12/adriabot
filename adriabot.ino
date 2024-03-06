@@ -13,9 +13,9 @@
 
 #define SPEED 250
 
-#define BCRVENA -1     // promini kad dodas botun
-#define BPLAVA -1      // promini kad dodas botun
-#define BZELENA  -1    // promini kad dodas botun
+#define BCRVENA  30    // promini kad dodas botun
+#define BPLAVA 32      // promini kad dodas botun
+#define BZELENA  28    // promini kad dodas botun
 
 #define SERVO -1       // promini kad dodas servo za ruku
 
@@ -46,7 +46,7 @@ class Ruka {
     Servo servo;
 };
 
-Ruka ruka(-1);      // promini kad spojis servo za ruku
+Ruka ruka(SERVO);
 
 AF_DCMotor dM4(4);
 AF_DCMotor lM3(3);
@@ -74,15 +74,11 @@ void setup() {
 }
 
 void loop() {
-
-  // if (zvucni.dist() > 6 || !zvucni.dist()) {
-  //   lineFollower();
-  // }
-  // else {
-  //   lM3.run(RELEASE);
-  //   dM4.run(RELEASE);
-  // }
-  lineFollower();
+  while (ultraZvucni()) {
+    // Serial.println("Dobar");
+  }
+  //lineFollower();
+  // birajBoju();
 }
 
 
@@ -140,17 +136,22 @@ void lineFollower() {
 
 
 void birajBoju() {
-  // risi se break i stavi procedure za odredjenu boju
   while (1) {
-    if (digitalRead(BCRVENA))
-      //crvena
+    if (!digitalRead(BCRVENA)) {
+      // crvena
+      Serial.println("Crveni");
       pCrvena();
-    if (digitalRead(BPLAVA))
+    }
+    if (!digitalRead(BPLAVA)) {
       //plava
+      Serial.println("Plavi");
       pPlava();
-    if (digitalRead(BZELENA))
+    }
+    if (!digitalRead(BZELENA)) {
       //zelena
+      Serial.println("Zeleni");
       pZelena();
+    }
   }
 }
 
@@ -189,5 +190,18 @@ int prepoznajBoje() {
     else {
       return -1;
     }
+  }
+}
+
+
+bool ultraZvucni() {
+  Serial.println(zvucni.dist());
+  if (zvucni.dist() > 6 || !zvucni.dist()) {
+    // Serial.println("[+] Ultrazvucni: reazmak dovoljan.");
+    return true;
+  }
+  else {
+    // Serial.println("[-] Ultrazvucni: rezmak nedovoljan!");
+    return false;
   }
 }
