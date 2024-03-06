@@ -4,49 +4,34 @@
 #include <Servo.h>
 
 // privremeno da se lakse promini
-#define KUT_OTVORI_RUKU 0         // kalibriraj da se ruka skroz otvori
-#define KUT_ZATVORI_RUKU 180      // kalibriraj da se ruka skroz zatvori
+#define KUT_OTVORI_RUKU 0       // kalibriraj da se ruka skroz otvori
+#define KUT_ZATVORI_RUKU 90     // kalibriraj da se ruka skroz zatvori
 
 #define SS 25
 #define LS 47
 #define DS 46
 
-#define SPEED 250
+#define SPEED 200
 
 #define BCRVENA  30    // promini kad dodas botun
 #define BPLAVA 32      // promini kad dodas botun
 #define BZELENA  28    // promini kad dodas botun
 
-#define SERVO -1       // promini kad dodas servo za ruku
+#define SERVO 10     // promini kad dodas servo za ruku
+#define OTVORI 0
+#define ZATVORI 1
 
 void lineFollower();
 void birajBoju();
 void pCrvena();
 void pPlava();
 void pZelena();
+int prepoznajBoje();
+bool ultraZvucni();
+void ruka(bool stanje);
 
-class Ruka {
-  public:
-    Ruka(uint8_t pin) {
-      servo.attach(pin);
-    }
-    void uhvati() {
-      if (servo.attached())
-        servo.write(KUT_ZATVORI_RUKU);     // staviti kut kad zavrsis kalibraciju
-      else
-        Serial.println("Ruka::uhvati() failed, no servo attached");
-    }
-    void pusti() {
-      if (servo.attached())
-        servo.write(KUT_OTVORI_RUKU);       // staviti kut kad zavrsis kalibraciju
-      else
-        Serial.println("Ruka::pusti() failed, no servo attached");
-    }
-  private:
-    Servo servo;
-};
 
-Ruka ruka(SERVO);
+Servo servo;
 
 AF_DCMotor dM4(4);
 AF_DCMotor lM3(3);
@@ -71,14 +56,24 @@ void setup() {
   // postavi huskylens
   Wire.begin();
   huskylens.begin(Wire);
+  // servo
+  servo.attach(SERVO);
+  ruka(OTVORI);
 }
 
 void loop() {
-  while (ultraZvucni()) {
-    // Serial.println("Dobar");
-  }
-  //lineFollower();
+  // while (ultraZvucni()) {
+  //   // Serial.println("Dobar");
+  // }
+
+  // lineFollower();
+
   // birajBoju();
+
+  // ruka(OTVORI);
+  // delay(1000);
+  // ruka(ZATVORI);
+  // delay(1000);
 }
 
 
@@ -195,13 +190,28 @@ int prepoznajBoje() {
 
 
 bool ultraZvucni() {
-  Serial.println(zvucni.dist());
+  // Serial.println(zvucni.dist());
   if (zvucni.dist() > 6 || !zvucni.dist()) {
-    // Serial.println("[+] Ultrazvucni: reazmak dovoljan.");
+    Serial.println("[+] Ultrazvucni: reazmak dovoljan.");
     return true;
   }
   else {
-    // Serial.println("[-] Ultrazvucni: rezmak nedovoljan!");
+    Serial.println("[-] Ultrazvucni: rezmak nedovoljan!");
     return false;
+  }
+}
+
+
+void ruka(bool stanje) {
+  if (!servo.attached()) {
+    Serial.println("Failed, no servo attached!");
+    return;
+  }
+
+  if (stanje) {
+    servo.write(KUT_ZATVORI_RUKU);
+  }
+  else {
+    servo.write(KUT_OTVORI_RUKU);
   }
 }
