@@ -3,7 +3,6 @@
 #include <HUSKYLENS.h>
 #include <Servo.h>
 
-// privremeno da se lakse promini
 #define KUT_OTVORI_RUKU  0   // kalibriraj da se ruka skroz otvori
 #define KUT_ZATVORI_RUKU 90  // kalibriraj da se ruka skroz zatvori
 
@@ -85,7 +84,7 @@ void lineFollower() {
     }
 
     if (digitalRead(LS) && !digitalRead(DS)) {
-      // ostro livo
+      // ostro lijevo
       lM3.run(BACKWARD);
       dM4.run(FORWARD);
     }
@@ -104,7 +103,7 @@ void lineFollower() {
   }
   else {
     if (digitalRead(LS) && !digitalRead(DS)) {
-      // livo
+      // lijevo
       lM3.run(RELEASE);
       dM4.run(FORWARD);
     }
@@ -196,14 +195,16 @@ bool ultraZvucni() {
 }
 
 void ruka(bool stanje) {
+  //ako servo nije spojen
   if (!servo.attached()) {
     Serial.println("Failed, no servo attached!");
     return;
   }
-
+  // zatvori ruku
   if (stanje) {
     servo.write(KUT_ZATVORI_RUKU);
   }
+  // otvori ruku
   else {
     servo.write(KUT_OTVORI_RUKU);
   }
