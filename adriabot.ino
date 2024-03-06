@@ -74,6 +74,8 @@ void loop() {
   // delay(1000);
   // ruka(ZATVORI);
   // delay(1000);
+
+  // prepoznajBoje();
 }
 
 
@@ -172,17 +174,21 @@ int prepoznajBoje() {
     HUSKYLENSResult result = huskylens.read();
     if (result.ID == 1) {
       // crvena
+      Serial.println("Prepoznata crvena");
       return 1;
     }
     else if (result.ID == 2) {
       // plava
+      Serial.println("Prepoznata plava");
       return 2;
     }
     else if (result.ID == 3) {
       // zelena
+      Serial.println("Prepoznata zelena");
       return 3;
     }
     else {
+      Serial.println("Prepoznata boja nije definirana");
       return -1;
     }
   }
