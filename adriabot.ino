@@ -4,8 +4,8 @@
 #include <Servo.h>
 
 // privremeno da se lakse promini
-#define KUT_OTVORI_RUKU 0       // kalibriraj da se ruka skroz otvori
-#define KUT_ZATVORI_RUKU 90     // kalibriraj da se ruka skroz zatvori
+#define KUT_OTVORI_RUKU  0   // kalibriraj da se ruka skroz otvori
+#define KUT_ZATVORI_RUKU 90  // kalibriraj da se ruka skroz zatvori
 
 #define SS 25
 #define LS 47
@@ -13,12 +13,12 @@
 
 #define SPEED 200
 
-#define BCRVENA  30    // promini kad dodas botun
-#define BPLAVA 32      // promini kad dodas botun
-#define BZELENA  28    // promini kad dodas botun
+#define BCRVENA 30
+#define BPLAVA  32
+#define BZELENA 28
 
-#define SERVO 10     // promini kad dodas servo za ruku
-#define OTVORI 0
+#define SERVO   10
+#define OTVORI  0
 #define ZATVORI 1
 
 void lineFollower();
@@ -26,10 +26,9 @@ void birajBoju();
 void pCrvena();
 void pPlava();
 void pZelena();
-int prepoznajBoje();
+int  prepoznajBoje();
 bool ultraZvucni();
 void ruka(bool stanje);
-
 
 Servo servo;
 
@@ -39,7 +38,6 @@ AF_DCMotor lM3(3);
 HCSR04 zvucni(22, 23);
 
 HUSKYLENS huskylens;
-
 
 void setup() {
   // debug
@@ -78,7 +76,6 @@ void loop() {
   // prepoznajBoje();
 }
 
-
 void lineFollower() {
   if (digitalRead(SS)) {
     if (!digitalRead(LS) && !digitalRead(DS)) {
@@ -104,7 +101,8 @@ void lineFollower() {
       lM3.run(RELEASE);
       dM4.run(RELEASE);
     }
-  } else {
+  }
+  else {
     if (digitalRead(LS) && !digitalRead(DS)) {
       // livo
       lM3.run(RELEASE);
@@ -131,7 +129,6 @@ void lineFollower() {
   }
 }
 
-
 void birajBoju() {
   while (1) {
     if (!digitalRead(BCRVENA)) {
@@ -140,31 +137,23 @@ void birajBoju() {
       pCrvena();
     }
     if (!digitalRead(BPLAVA)) {
-      //plava
+      // plava
       Serial.println("Plavi");
       pPlava();
     }
     if (!digitalRead(BZELENA)) {
-      //zelena
+      // zelena
       Serial.println("Zeleni");
       pZelena();
     }
   }
 }
 
+void pCrvena() { return; }
 
-void pCrvena() {
-  return;
-}
+void pPlava() { return; }
 
-void pPlava() {
-  return;
-}
-
-void pZelena() {
-  return;
-}
-
+void pZelena() { return; }
 
 int prepoznajBoje() {
   // huskylens
@@ -194,7 +183,6 @@ int prepoznajBoje() {
   }
 }
 
-
 bool ultraZvucni() {
   // Serial.println(zvucni.dist());
   if (zvucni.dist() > 6 || !zvucni.dist()) {
@@ -206,7 +194,6 @@ bool ultraZvucni() {
     return false;
   }
 }
-
 
 void ruka(bool stanje) {
   if (!servo.attached()) {
