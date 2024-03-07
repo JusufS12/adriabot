@@ -185,11 +185,11 @@ int prepoznajBoje() {
 bool ultraZvucni() {
   // Serial.println(zvucni.dist());
   if (zvucni.dist() > 6 || !zvucni.dist()) {
-    Serial.println("[+] Ultrazvucni: reazmak dovoljan.");
+    Serial.println("[+] Ultrazvucni: razmak dovoljan.");
     return true;
   }
   else {
-    Serial.println("[-] Ultrazvucni: rezmak nedovoljan!");
+    Serial.println("[-] Ultrazvucni: razmak nedovoljan!");
     return false;
   }
 }
